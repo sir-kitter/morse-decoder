@@ -37,9 +37,20 @@ const MORSE_TABLE = {
     '-----':  '0',
 };
 
-function decode(expr) {
-    // write your solution here
+const morse_to_binary = (morse) => {
+    return '00'.repeat(5 - morse.length) + (morse.split('').reduce((binary, char) => binary + (char === '.' ? '10' : '11'), ''))
 }
+
+let binary_to_letter = { '**********' : ' ' }
+for (const [morse, letter] of Object.entries(MORSE_TABLE)) {
+    binary_to_letter[morse_to_binary(morse)] = letter
+}
+
+function decode(expr) {
+    return expr.match(/.{1,10}/g).reduce((result, binary) => result + binary_to_letter[binary], '')
+}
+
+console.log(decode("00101010100000000010001011101000101110100000111111**********00001011110000111111000010111000101110100000111010"))
 
 module.exports = {
     decode
